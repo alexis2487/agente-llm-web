@@ -1,8 +1,5 @@
 ---
-/* Importa el CSS global generado por Tailwind */
 import "../styles/global.css";
-
-/* Lee la variable pública desde .env (si existe) */
 const proxy = import.meta.env.PUBLIC_PROXY_URL || null;
 ---
 
@@ -15,22 +12,50 @@ const proxy = import.meta.env.PUBLIC_PROXY_URL || null;
     <title>Agente LLM — CV</title>
   </head>
   <body class="min-h-screen bg-gray-50 text-gray-900">
-    <main class="max-w-3xl mx-auto p-6">
-      <h1 class="text-2xl font-bold mb-4">✅ Sitio OK (Fase 0)</h1>
-      <p class="mb-2">Este sitio fue generado con Astro + Tailwind.</p>
+    <main class="max-w-3xl mx-auto p-6 space-y-4">
+      <h1 class="text-2xl font-bold">✅ Sitio OK (Fase 1)</h1>
+      <p class="text-sm text-gray-600">Conectado a Worker (prueba desde el navegador).</p>
 
-      <div class="mt-4 p-4 rounded-xl bg-white shadow">
+      <div class="p-4 rounded-xl bg-white shadow">
         <h2 class="font-semibold mb-2">Configuración</h2>
-        <p>
-          PUBLIC_PROXY_URL:
-          <strong>{proxy ? proxy : "No configurado"}</strong>
-        </p>
-        <p class="text-sm text-gray-500 mt-2">
-          Crea un archivo <code>.env</code> en <code>apps/site</code> para definirlo.
-        </p>
+        <p>PUBLIC_PROXY_URL: <strong>{proxy ? proxy : "No configurado"}</strong></p>
       </div>
 
-      <p class="mt-6 text-sm text-gray-500">El chat llegará en Fase 1.</p>
+      <div class="p-4 rounded-xl bg-white shadow space-y-3">
+        <h2 class="font-semibold">Prueba rápida del /chat</h2>
+        <button id="btn-test" class="px-3 py-2 rounded-lg bg-black text-white">Probar saludo</button>
+        <pre id="out" class="whitespace-pre-wrap text-sm bg-gray-100 p-3 rounded-lg"></pre>
+      </div>
     </main>
+
+    <script>
+      const proxyUrl = {proxy ? JSON.stringify(proxy) : "null"};
+      const btn = document.getElementById("btn-test");
+      const out = document.getElementById("out");
+
+      btn?.addEventListener("click", async () => {
+        if (!proxyUrl) {
+          out.textContent = "PUBLIC_PROXY_URL no configurado";
+          return;
+        }
+        out.textContent = "Llamando a " + proxyUrl + "/chat ...";
+        try {
+          const resp = await fetch(proxyUrl + "/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              messages: [
+                { role: "system", content: "Eres un asistente corto y directo." },
+                { role: "user", content: "Dime hola en una frase." }
+              ]
+            })
+          });
+          const data = await resp.json();
+          out.textContent = JSON.stringify(data, null, 2);
+        } catch (e) {
+          out.textContent = "Error: " + (e?.message || e);
+        }
+      });
+    </script>
   </body>
 </html>

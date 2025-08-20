@@ -1,0 +1,7 @@
+﻿name = "llm-proxy"
+main = "src/index.ts"
+compatibility_date = "2025-08-01"
+
+# Variables opcionales (configuraremos ALLOW_ORIGIN luego)
+[vars]
+# ALLOW_ORIGIN = "https://jairalexis2487.github.io/agente-llm-web"
