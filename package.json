@@ -1,0 +1,10 @@
+{
+  "name": "agente-llm-web",
+  "private": true,
+  "workspaces": ["apps/*", "workers/*"],
+  "scripts": {
+    "build": "npm run -w apps/site build",
+    "fmt": "npx prettier -w .",
+    "lint": "echo TODO: add ESLint"
+  }
+}
