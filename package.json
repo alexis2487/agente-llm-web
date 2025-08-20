@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "agente-llm-web",
   "private": true,
   "workspaces": ["apps/*", "workers/*"],
